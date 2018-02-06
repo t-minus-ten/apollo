@@ -1,17 +1,8 @@
 <?php
 
-namespace Apollo\Assets;
-use Apollo\Extend\Util;
-
-
-/**
- * Add Custom Image Sizes
- *
- * @since  1.0.0
- */
-
-// add_image_size($name, $width, $height, $hard_crop);
-
+/* Load css, js, and other assets */
+namespace Apollo\Theme\Assets;
+      use Apollo\Theme\Utilities;
 
 
 /**
@@ -32,7 +23,7 @@ function Get_Asset( $revpath ) {
   } else {
 
     // Get revisioned assets from Rev Manifest
-    if ( $manifest = json_decode( Util\Fetch_Url( dirname(__DIR__) . '/dist/_rev-manifest.json', 'r' ) ) ) {
+    if ( $manifest = json_decode( Utilities\Fetch_Url( dirname(__DIR__) . '/dist/_rev-manifest.json', 'r' ) ) ) {
 
       $asset_path = $manifest->$revpath ? $home_path . DIST_DIR . $manifest->$revpath : $src_path;
 
@@ -47,6 +38,8 @@ function Get_Asset( $revpath ) {
   return $asset_path;
 
 }
+
+
 
 
 
@@ -72,7 +65,7 @@ function enqueue_assets() {
     $pkg_json     = json_decode( file_get_contents( get_stylesheet_directory() . '/package.json', "r" ) );
     $jquery_ver   = str_replace('^', '', $pkg_json->dependencies->jquery);
     $url          = 'https://ajax.googleapis.com/ajax/libs/jquery/' . $jquery_ver . '/jquery.min.js';
-    $local_jquery = get_bloginfo( 'stylesheet_directory' ) . '/dist/js/vendor/jquery.min.js';
+    $local_jquery = get_bloginfo( 'stylesheet_directory' ) . DIST_DIR . 'js/jquery.min.js';
     // $jquery_ver = '2.2.0';
 
     wp_deregister_script( 'jquery' );
@@ -105,7 +98,11 @@ function enqueue_assets() {
 
     wp_register_script( 'jquery', $url, array(), $jquery_ver, true );
 
+    wp_enqueue_script( 'jquery' );
+
   }
+
+
 
 
   /**
@@ -114,7 +111,9 @@ function enqueue_assets() {
    * @since  1.0.0
    */
   wp_enqueue_script( 'jquery' );
-  wp_enqueue_script( 'apollo-js', Get_Asset('js/bundle.js'), ['jquery'], null, true );
+
+  $js = WP_ENV === 'development' ? 'js/app.js' : 'js/app.min.js';
+  wp_enqueue_script( 'apollo-js', Get_Asset($js), ['jquery'], null, true );
 
 
   /**
@@ -136,7 +135,6 @@ function enqueue_assets() {
     wp_enqueue_script( 'comment-reply' );
 
   }
-
 
 
   /**
@@ -163,6 +161,35 @@ add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_assets', 100 );
 
 
 
+
+
+/**
+ * Add Admin CSS Sheets
+ *
+ * @since 1.0.0
+ */
+// function load_admin_styles() {
+
+//   if ( FONTAWESOME ) {
+//     wp_enqueue_style( 'font-awesome', 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' );
+//   }
+
+//   // Create file `assets/scss/main/admin.js`
+//   $css = WP_ENV === 'development' ? 'admin.css' : 'admin.min.css';
+//   wp_enqueue_style( 'apollo-admin-css', Get_Asset( 'css/' . $css ), false, null );
+
+//   // Create file `assets/js/single/admin.js`
+//   $js = WP_ENV === 'development' ? 'admin.js' : 'admin.min.js';
+//   wp_enqueue_script( 'apollo-admin-js', Get_Asset( 'js/single/' . $js ), ['jquery'], null );
+
+// }
+
+// add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\load_admin_styles' );
+
+
+
+
+
 /**
  * Add Typekit to head if ID is added
  *
@@ -180,6 +207,8 @@ if ( TYPEKIT_ID ) {
   add_action('wp_head', __NAMESPACE__ . '\\typekit', 1);
 
 }
+
+
 
 
 
@@ -203,6 +232,9 @@ function apollo_ga_id_settings_section() {
 }
 
 
+
+
+
 /**
  * Callback for Google Analytics ID field
  *
@@ -218,6 +250,9 @@ function ga_id_callback() {
 }
 
 
+
+
+
 /**
  * Save Analytics Field
  *
@@ -229,6 +264,8 @@ function ga_id_textbox_callback( $args ) {
   echo '<input type="text" id="'. $args[0] .'" name="'. $args[0] .'" value="' . $option . '" />';
 
 }
+
+
 
 
 
