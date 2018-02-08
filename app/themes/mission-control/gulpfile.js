@@ -1,12 +1,4 @@
 /**
- * CONFIGURE LOCALHOST URL
- * If no localhost url is required, or to just
- * run on localhost, set to false
- *
- */
-const devUrl = 'apollo.dev';
-
-/**
  * CONFIGURE AUTOPREFIXER SUPPORT
  *
  */
@@ -69,6 +61,14 @@ const fs           = require('fs');
 const browsersync  = require('browser-sync');
 
 
+/**
+ * CONFIGURE LOCALHOST URL
+ * If no localhost url is required, or to just
+ * run on localhost, set to false
+ *
+ */
+
+ let devUrl = argv.devUrl ? argv.devUrl : 'apollo.dev';
 
 
 /**
@@ -406,6 +406,3 @@ gulp.task('default', ['clean'], sequence(
   ['copy_jquery', 'copy_fonts'],
   ['build_rev']
 ));
-
-
-
