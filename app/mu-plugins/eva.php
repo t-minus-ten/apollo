@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name:  EVA
-Plugin URI:   https://github.com/j2made/eva
+Plugin URI:   https://github.com/t-minus-ten/eva
 Description:  Extravehicular Activites for Apollo. Conditional indexing, MU-Plugin Autoloading, Default Themes.
 Version:      1.0.0
-Author:       J2 Design Partnership
-Author URI:   http://github.com/j2made
+Author:       Shaun M Baer
+Author URI:   http://github.com/t-minus-ten
 License:      MIT License
 */
 

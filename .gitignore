@@ -19,5 +19,6 @@ composer.lock
 .well-known
 
 # Apollo Config
-wp-config.php
+# wp-config.php
+wp-config-local.php
 salts.php

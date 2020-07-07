@@ -8,11 +8,15 @@
 
 
 /*
- * Load local wp-config file if present
+ * Load local or production wp-config file if present
  */
-if ( file_exists( __DIR__ . '/web/wp-config-local.php' ) ) {
+if ( file_exists( __DIR__ . '/wp-config-local.php' ) ) {
 
-	include_once( __DIR__ . '/web/wp-config-local.php' );
+	include_once( __DIR__ . '/wp-config-local.php' );
+
+} elseif ( file_exists( __DIR__ . '/wp-config-production.php' ) ) {
+
+  include_once( __DIR__ . '/wp-config-production.php' );
 
 } else {
 
@@ -28,13 +32,8 @@ if ( file_exists( __DIR__ . '/web/wp-config-local.php' ) ) {
 
   /** Codebase Enviornment */
   define("WP_ENV", "production");  // 'development', 'staging', or 'production'
+
 }
-
-
-
-
-
-
 
 
 /**
