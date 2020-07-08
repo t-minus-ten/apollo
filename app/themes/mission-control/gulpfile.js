@@ -1,49 +1,49 @@
 // Config object
-const CONFIG = require('./.gulpconfig.js');
+const CONFIG                 = require('./.gulpconfig.js');
+const localgulpConfig        = '.local-gulpconfig.json';
+const localgulpConfigDefault = '.ex-local-gulpconfig.json';
+
 
 // Util
-const gulp = require('gulp');
+const gulp        = require('gulp');
 const browsersync = require('browser-sync').create('bc_server');
-const yargs = require('yargs').argv;
-const fs = require('fs');
+const yargs       = require('yargs').argv;
+const fs          = require('fs');
+const path        = require('path');
+const log         = require('fancy-log');
+const flatmap     = require('gulp-flatmap');
+const sourcemaps  = require('gulp-sourcemaps');
+const gulpIf      = require('gulp-if');
+const colors      = require('colors');
+const using       = require('gulp-using');
 // const del = require('del');
-const log = require('fancy-log');
-const flatmap = require('gulp-flatmap');
-const sourcemaps = require('gulp-sourcemaps');
-const gulpIf = require('gulp-if');
-const colors = require('colors');
-const using = require('gulp-using');
-// const path = require('path');
 // const util = require('util');
 
 // Sass
-const sass = require('gulp-sass');
-const autoprefixer = require('gulp-autoprefixer');
-const cssnano = require('gulp-cssnano');
-const mediaQuery = require('gulp-group-css-media-queries');
-const sassGlob = require('gulp-sass-glob');
-const gulpStylelint = require('gulp-stylelint');
-const postcss = require('gulp-postcss');
-const objectFit = require('postcss-object-fit-images');
+const sass            = require('gulp-sass');
+const autoprefixer    = require('gulp-autoprefixer');
+const cssnano         = require('gulp-cssnano');
+const mediaQuery      = require('gulp-group-css-media-queries');
+const sassGlob        = require('gulp-sass-glob');
+const gulpStylelint   = require('gulp-stylelint');
+const postcss         = require('gulp-postcss');
+const objectFit       = require('postcss-object-fit-images');
 const easingGradients = require('postcss-easing-gradients');
 
 // Rollup and Scripts
-const rollup = require('rollup');
-const rollupEach = require('gulp-rollup-each');
-const rollupBabel = require('rollup-plugin-babel');
-const rollupBuble = require('rollup-plugin-buble')
+const rollup        = require('rollup');
+const rollupEach    = require('gulp-rollup-each');
+const rollupBabel   = require('rollup-plugin-babel');
 const rollupResolve = require('rollup-plugin-node-resolve');
-const rollupCommon = require('rollup-plugin-commonjs');
-const rollupESLint = require('rollup-plugin-eslint');
-const uglify = require('gulp-uglify');
-const imagemin = require('gulp-imagemin');
+const rollupCommon  = require('rollup-plugin-commonjs');
+const rollupESLint  = require('rollup-plugin-eslint');
+const uglify        = require('gulp-uglify');
+const imagemin      = require('gulp-imagemin');
 
 // GitHub Pages
-const ghPages = require('gulp-gh-pages');
+// const ghPages = require('gulp-gh-pages');
 
 // Definitions
-const localConfig = '.gulpconfig.js';
-const localConfigDefault = '.ex-gulpconfig.js';
 let production = yargs.production ? yargs.production : false;
 
 
@@ -65,18 +65,34 @@ const reload = done => {
 // Check to see if a .gulpconfig.js file exists, if
 // not, creates one from .ex-gulpconfig.js
 //
-// const checkGulpConfig = done => {
-//   if (!CONFIG.useProxy) {
-//     return;
-//   }
+const checkGulpConfig = done => {
+  if (!CONFIG.useProxy) {
+    return false;
+  }
 
-//   if (CONFIG.proxy == null) {
-//     log(`Edit the proxy value to match your local url in ${CONFIG} \n`.underline.red);
-//     process.exit(1);
-//   }
-
-//   done();
-// };
+  fs.access(localgulpConfig, fs.constants.F_OK, err => {
+    if (err) {
+      let source = fs.createReadStream(localgulpConfigDefault);
+      let dest = fs.createWriteStream(localgulpConfig);
+      source.pipe(dest);
+      source.on('end', () => {
+        log(
+          `Edit the proxy value in ${localgulpConfig} to match your virtual host. \n`
+            .underline.red
+        );
+        process.exit(1);
+      });
+      source.on('error', err => {
+        log(
+          `Copy ${localgulpConfigDefault} to ${localgulpConfig} and edit the proxy value  to match your virtual host. \n`
+            .underline.red
+        );
+        process.exit(1);
+      });
+    }
+  });
+  done();
+};
 
 //
 // Check to see if a .gulp-config.json file exists, if
@@ -94,11 +110,9 @@ const setProductionTrue = done => {
 const compileSass = (stream, css_dest_path) => {
   return (
     stream
-      // .pipe(using({ prefix: 'Processing' }))
       .pipe(gulpIf(!production, sourcemaps.init()))
       .pipe(
         gulpStylelint({
-          // fix: true,
           reporters: [{ formatter: 'string', console: true }],
           failAfterError: false,
           debug: true,
@@ -117,7 +131,6 @@ const compileSass = (stream, css_dest_path) => {
           grid: true,
         })
       )
-      // .pipe(gulpIf(production, mediaQuery()))
       .pipe(gulpIf(production, cssnano()))
       .pipe(gulpIf(!production, sourcemaps.write('.')))
       .pipe(gulp.dest(css_dest_path))
@@ -134,7 +147,7 @@ gulp.task('sass', () => {
     .src(CONFIG.paths.sass.src)
     .pipe(
       flatmap(stream => {
-        return compileSass(stream, CONFIG.paths.sass.dest);
+        return compileSass(stream, CONFIG.paths.sass.dist);
       })
     );
 });
@@ -246,6 +259,18 @@ gulp.task('watch', () => {
 // Init CMS Browsersync Server
 //
 gulp.task('startsync:cms', cb => {
+  // Check for local gulpconfig proxy
+  if (CONFIG.useProxy) {
+    const g_config = JSON.parse(fs.readFileSync(localConfig));
+
+    if (g_config.proxy == null) {
+      log(`Edit the proxy value in ${localConfig} \n`.underline.red);
+      process.exit(1);
+    }
+
+    CONFIG.browsersyncOpts['proxy'] = g_config.proxy;
+  }
+
   browsersync.init(CONFIG.browsersyncOpts, cb);
 });
 
@@ -271,7 +296,6 @@ gulp.task(
   gulp.series(
     setProductionTrue, // Runs with production set to true
     'default',
-    'favicon'
   )
 );
 

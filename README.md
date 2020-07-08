@@ -36,9 +36,9 @@ Make sure you have everything listed in the above requirements installed & downl
 - Open your terminal, `cd` into the directory you just cloned (base directory).
 - Edit `composer.json` to add plugins as needed. See [Adding Plugins](#adding-plugins)
 - Run `composer create-project`
-- _If developing locally:_ point local hosts to the base directory. 
+- _If developing locally:_ point local hosts to the base directory.
 - Edit the `wp-config` that is created in the base directory with your database and url credentials.
-- Change the name of the Theme (`app/themes/mission-control`) as needed. 
+- Change the name of the Theme (`app/themes/mission-control`) as needed.
 - Edit the `style.css` file in the theme directory with your own information as needed
 - Open the `gulpfile.js` file and edit the `devUrl` variable to match your host url.
 - `cd` to the theme directory and run `npm install`. The `gulp` task should run at the end of installation.
@@ -94,7 +94,7 @@ Theme docs are maintained [here](app/themes/mission-control/README.md).
 ## Contributing:
 ### Issues
 
-Report all issues [here] (https://github.com/j2made/apollo/issues)
+Report all issues [here] (https://github.com/t-minus-ten/apollo/issues)
 
 
 ## Credits:
