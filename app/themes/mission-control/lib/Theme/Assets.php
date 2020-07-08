@@ -11,33 +11,33 @@ namespace Apollo\Theme\Assets;
  * @param  $revpath  The path of the original file in the rev manifest.
  * @since  1.0.0
  */
-function Get_Asset( $revpath ) {
+// function Get_Asset( $revpath ) {
 
-  $home_path = get_bloginfo( 'stylesheet_directory' );
-  $src_path  = $asset_path = $home_path . '/src/' . $revpath;
+//   $home_path = get_bloginfo( 'stylesheet_directory' );
+//   $src_path  = $asset_path = $home_path . '/src/' . $revpath;
 
-  if ( WP_ENV === 'development' ) {
+//   if ( WP_ENV === 'development' ) {
 
-    $asset_path = $home_path . DIST_DIR . $revpath;
+//     $asset_path = $home_path . DIST_DIR . $revpath;
 
-  } else {
+//   } else {
 
-    // Get revisioned assets from Rev Manifest
-    if ( $manifest = json_decode( Utilities\Fetch_Url( dirname(__DIR__) . '/dist/_rev-manifest.json', 'r' ) ) ) {
+//     // Get revisioned assets from Rev Manifest
+//     if ( $manifest = json_decode( Utilities\Fetch_Url( dirname(__DIR__) . '/dist/_rev-manifest.json', 'r' ) ) ) {
 
-      $asset_path = $manifest->$revpath ? $home_path . DIST_DIR . $manifest->$revpath : $src_path;
+//       $asset_path = $manifest->$revpath ? $home_path . DIST_DIR . $manifest->$revpath : $src_path;
 
-    } else {
+//     } else {
 
-      // Use src if manifest is unavailable
-      $asset_path = $src_path;
+//       // Use src if manifest is unavailable
+//       $asset_path = $src_path;
 
-    }
-  }
+//     }
+//   }
 
-  return $asset_path;
+//   return $asset_path;
 
-}
+// }
 
 
 
@@ -49,6 +49,9 @@ function Get_Asset( $revpath ) {
  * @since 1.0.0
  */
 function enqueue_assets() {
+
+  $home_path  = get_bloginfo( 'stylesheet_directory' );
+  $asset_path = $home_path + '/assets/dist/';
 
   /**
    * Enqueue jQuery
@@ -63,7 +66,7 @@ function enqueue_assets() {
   if ( !is_admin() ) {
 
     $pkg_json     = json_decode( file_get_contents( get_stylesheet_directory() . '/package.json', "r" ) );
-    $jquery_ver   = str_replace('^', '', $pkg_json->dependencies->jquery);
+    $jquery_ver   = '3.5.1';
     $url          = 'https://ajax.googleapis.com/ajax/libs/jquery/' . $jquery_ver . '/jquery.min.js';
     $local_jquery = get_bloginfo( 'stylesheet_directory' ) . DIST_DIR . 'js/jquery.min.js';
     // $jquery_ver = '2.2.0';
@@ -111,9 +114,7 @@ function enqueue_assets() {
    * @since  1.0.0
    */
   wp_enqueue_script( 'jquery' );
-
-  $js = WP_ENV === 'development' ? 'js/app.js' : 'js/app.min.js';
-  wp_enqueue_script( 'apollo-js', Get_Asset($js), ['jquery'], null, true );
+  wp_enqueue_script( 'apollo-js', $asset_path . 'js/app.js', ['jquery'], null, true );
 
 
   /**
@@ -121,8 +122,7 @@ function enqueue_assets() {
    *
    * @since  1.0.0
    */
-  $css = WP_ENV === 'development' ? 'css/main.css' : 'css/main.min.css';
-  wp_enqueue_style( 'apollo-css', Get_Asset($css), false, null );
+  wp_enqueue_style( 'apollo-css', $asset_path . 'css/app.css', false, null );
 
 
   /**
@@ -174,13 +174,12 @@ add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_assets', 100 );
 //     wp_enqueue_style( 'font-awesome', 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' );
 //   }
 
-//   // Create file `assets/scss/main/admin.js`
-//   $css = WP_ENV === 'development' ? 'admin.css' : 'admin.min.css';
-//   wp_enqueue_style( 'apollo-admin-css', Get_Asset( 'css/' . $css ), false, null );
+//   // Create file `assets/src/scss/admin.js`
+//   wp_enqueue_style( 'apollo-admin-css', $asset_path . 'css/admin.css', false, null );
 
-//   // Create file `assets/js/single/admin.js`
+//   // Create file `assets/src/js/admin.js`
 //   $js = WP_ENV === 'development' ? 'admin.js' : 'admin.min.js';
-//   wp_enqueue_script( 'apollo-admin-js', Get_Asset( 'js/single/' . $js ), ['jquery'], null );
+//   wp_enqueue_script( 'apollo-admin-js', $asset_path . 'js/admin.js' ), ['jquery'], null );
 
 // }
 

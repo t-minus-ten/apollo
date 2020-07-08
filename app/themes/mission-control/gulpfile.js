@@ -16,7 +16,7 @@ const sourcemaps  = require('gulp-sourcemaps');
 const gulpIf      = require('gulp-if');
 const colors      = require('colors');
 const using       = require('gulp-using');
-// const del = require('del');
+const del         = require('del');
 // const util = require('util');
 
 // Sass
@@ -202,7 +202,7 @@ gulp.task('images', () => {
     .pipe(
       imagemin([
         imagemin.gifsicle({ interlaced: true }),
-        imagemin.jpegtran({ progressive: true }),
+        imagemin.mozjpeg({ progressive: true }),
         imagemin.optipng({ optimizationLevel: 5 }),
         imagemin.svgo({
           plugins: [
@@ -217,7 +217,16 @@ gulp.task('images', () => {
 });
 
 
-
+// ----------
+// CLEAN TASK
+// ----------
+gulp.task('clean', () => {
+  return del([
+    `${CONFIG.paths.sass.dist}/*`,
+    `${CONFIG.paths.js.dist}/*`,
+    `${CONFIG.paths.images.dist}/*`
+  ]);
+});
 
 
 
@@ -295,6 +304,7 @@ gulp.task(
   'build',
   gulp.series(
     setProductionTrue, // Runs with production set to true
+    'clean',
     'default',
   )
 );

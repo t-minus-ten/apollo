@@ -99,12 +99,12 @@ define( 'GOOGLE_FONTS', false );              // Google Fonts           False or
  *
  * @since  1.0.0
  */
-if ( WP_ENV == 'development' ) {
+// if ( WP_ENV == 'development' ) {
 
-  define('DIST_DIR', '/src/');
+//   define('DIST_DIR', '/src/');
 
-} else {
+// } else {
 
-  define('DIST_DIR', '/dist/');
+//   define('DIST_DIR', '/dist/');
 
-}
+// }
