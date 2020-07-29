@@ -1,5 +1,17 @@
 # Apollo
 
+## Version 2 Updates
+
+Mission Control:
+- Restructured asset directory
+- Removed rev-manifest and unique-asset creation
+- Convert js compilation to Rollup
+- Simplified lib directory
+- Add theme config for gulp, as well as local config for browsersync
+
+Stack:
+- Updated Composer dependency versions
+
 #### A WordPress craft launched with Composer, manned with automation.
 
 ## About
@@ -25,9 +37,6 @@ Global NPM Packages:
 - [Gulp](http://gulpjs.com/) v3.9.1^ `npm install -g gulp`
 - [Browsersync](https://www.browsersync.io/) v2.11.1^ `npm install -g browser-sync`
 
-Optional:
-
-- [Bower](http://bower.io/) v1.3.12
 
 ## Installation
 
