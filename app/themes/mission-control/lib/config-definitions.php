@@ -92,19 +92,3 @@ define( 'FONTAWESOME', false );
 define( 'GOOGLE_FONTS', false );              // Google Fonts           False or Font Family
 
 
-/**
- * Define build directory
- * ----------------------
- * Value points to enviornment appropriate assets directory.
- *
- * @since  1.0.0
- */
-// if ( WP_ENV == 'development' ) {
-
-//   define('DIST_DIR', '/src/');
-
-// } else {
-
-//   define('DIST_DIR', '/dist/');
-
-// }

@@ -33,7 +33,7 @@ function hide_sidebar() {
  */
 function get_page_header() {
 
-  // if ( is_front_page() || 'jobs' === get_post_type() ) {
+  // if ( is_front_page() || 'some_post_type' === get_post_type() ) {
   //
   //   return false;
   //
@@ -56,7 +56,7 @@ function get_page_header() {
  */
 function get_page_footer() {
 
-  // if ( is_front_page() || 'jobs' === get_post_type() ) {
+  // if ( is_front_page() || 'some_post_type' === get_post_type() ) {
   //
   //   return false;
   //

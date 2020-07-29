@@ -11,8 +11,10 @@ namespace Apollo\Extend\WP_Admin;
  * @since  1.0.0
  */
 function add_editor_styles() {
+  $home_path  = get_bloginfo( 'stylesheet_directory' );
+  $asset_path = $home_path . '/assets/dist/';
 
-  add_editor_style( DIST_DIR . 'styles/editor-style.css' );
+  add_editor_style( $asset_path . 'css/editor-style.css' );
 
 }
 

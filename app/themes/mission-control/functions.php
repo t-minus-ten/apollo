@@ -19,22 +19,22 @@ if ( ! defined( 'WP_ENV' ) ) {
  * @since 1.0.0
  */
 $function_includes = [
-  'Config/Definitions',     // Setup Definitions for Config/Settings
-  'Config/Settings',        // Theme Setup, contol WordPress `<head>` output
-  'Config/Conditionals',    // Conditionals for layout, display, etc.
+  'config-definitions',     // Setup Definitions for Config/Settings
+  'config-settings',        // Theme Setup, contol WordPress `<head>` output
+  'config-conditionals',    // Conditionals for layout, display, etc.
 
-  'Theme/Wrapper',          // @scribu WordPress Theme Wrapper
-  'Theme/Structure',        // Determine the base html structure based on settings
-  'Theme/Assets',           // Load css, js, and other assets
-  'Theme/Utilities',        // Theme based utility functions
-  'Theme/Modules',          // Create modular, reusable HTML components
+  'theme-wrapper',          // @scribu WordPress Theme Wrapper
+  'theme-structure',        // Determine the base html structure based on settings
+  'theme-assets',           // Load css, js, and other assets
+  'utilities',              // Theme based utility functions
+  'theme-modules',          // Create modular, reusable HTML components
 
-  'Extend/Queries',         // Change how queries operate
-  'Extend/Images',          // Add new Image sizes
-  'Extend/Post_Types',      // Add Custom Post Types
-  'Extend/Taxonomy',        // Add Custom Taxonomies
-  'Extend/WP_Admin',        // Change aspects of WP Admin
-  'Extend/WP_Output',       // Change output of default WP HTML, i.e. nav items, oembeds, and body classes
+  'queries',                // Change how queries operate
+  'images',                 // Add new Image sizes
+  'post-types',             // Add Custom Post Types
+  'taxonomy',               // Add Custom Taxonomies
+  'wp-admin',               // Change aspects of WP Admin
+  'wp-output',              // Change output of default WP HTML, i.e. nav items, oembeds, and body classes
 ];
 
 

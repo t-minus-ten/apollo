@@ -2,45 +2,8 @@
 
 /* Load css, js, and other assets */
 namespace Apollo\Theme\Assets;
-      use Apollo\Theme\Utilities;
 
-
-/**
- * Get Assets based on enviornment
- *
- * @param  $revpath  The path of the original file in the rev manifest.
- * @since  1.0.0
- */
-// function Get_Asset( $revpath ) {
-
-//   $home_path = get_bloginfo( 'stylesheet_directory' );
-//   $src_path  = $asset_path = $home_path . '/src/' . $revpath;
-
-//   if ( WP_ENV === 'development' ) {
-
-//     $asset_path = $home_path . DIST_DIR . $revpath;
-
-//   } else {
-
-//     // Get revisioned assets from Rev Manifest
-//     if ( $manifest = json_decode( Utilities\Fetch_Url( dirname(__DIR__) . '/dist/_rev-manifest.json', 'r' ) ) ) {
-
-//       $asset_path = $manifest->$revpath ? $home_path . DIST_DIR . $manifest->$revpath : $src_path;
-
-//     } else {
-
-//       // Use src if manifest is unavailable
-//       $asset_path = $src_path;
-
-//     }
-//   }
-
-//   return $asset_path;
-
-// }
-
-
-
+use Apollo\Theme\Utilities;
 
 
 /**
@@ -51,7 +14,7 @@ namespace Apollo\Theme\Assets;
 function enqueue_assets() {
 
   $home_path  = get_bloginfo( 'stylesheet_directory' );
-  $asset_path = $home_path + '/assets/dist/';
+  $asset_path = $home_path . '/assets/dist/';
 
   /**
    * Enqueue jQuery
@@ -68,39 +31,38 @@ function enqueue_assets() {
     $pkg_json     = json_decode( file_get_contents( get_stylesheet_directory() . '/package.json', "r" ) );
     $jquery_ver   = '3.5.1';
     $url          = 'https://ajax.googleapis.com/ajax/libs/jquery/' . $jquery_ver . '/jquery.min.js';
-    $local_jquery = get_bloginfo( 'stylesheet_directory' ) . DIST_DIR . 'js/jquery.min.js';
+    // $local_jquery = get_bloginfo( 'stylesheet_directory' ) . DIST_DIR . 'js/jquery.min.js';
     // $jquery_ver = '2.2.0';
 
     wp_deregister_script( 'jquery' );
     delete_transient( 'google_jquery' );
 
-    if ( 'false' == ( $google = get_transient( 'google_jquery' ) ) ) {
+    // if ( 'false' == ( $google = get_transient( 'google_jquery' ) ) ) {
 
-      // Transient failed, set to local jquery
-      $url = $local_jquery;
+    //   // Transient failed, set to local jquery
+    //   $url = $local_jquery;
 
-    } elseif ( false === $google ) {
+    // } elseif ( false === $google ) {
 
-      // Test for Google url
-      $resp = wp_remote_head( $url );
+    //   // Test for Google url
+    //   $resp = wp_remote_head( $url );
 
-      if ( !is_wp_error( $resp ) && 200 == $resp['response']['code'] ) {
+    //   if ( !is_wp_error( $resp ) && 200 == $resp['response']['code'] ) {
 
-        // Things are good, set transient for 5 minutes
-        set_transient( 'google_jquery', 'true', 60 * 5 );
+    //     // Things are good, set transient for 5 minutes
+    //     set_transient( 'google_jquery', 'true', 60 * 5 );
 
-      } else {
+    //   } else {
 
-        // Error, use WP version and set transient for 5 minutes
-        set_transient( 'google_jquery', 'false', 60 * 5 );
-        $url = $local_jquery;
-        $jquery_ver = '1.11.3'; // Set jQuery Version, as of 4.3
+    //     // Error, use WP version and set transient for 5 minutes
+    //     set_transient( 'google_jquery', 'false', 60 * 5 );
+    //     $url = $local_jquery;
+    //     $jquery_ver = '1.11.3'; // Set jQuery Version, as of 4.3
 
-      }
-    }
+    //   }
+    // }
 
     wp_register_script( 'jquery', $url, array(), $jquery_ver, true );
-
     wp_enqueue_script( 'jquery' );
 
   }
